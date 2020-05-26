@@ -7,6 +7,91 @@
 	<title>Document</title>
 </head>
 <body>
-Tutaj będzie scena gry
+<canvas id="app" width="600" height="400">
+
+</canvas>
+<script>
+    const canvas = document.getElementById('app');
+    const ctx = canvas.getContext('2d');
+	const FPS = 30;
+	ctx.fillStyle = 'rgb(200, 0, 0)';
+	class Player{
+	    dx;
+	    dy;
+	    x;
+	    y;
+	    width;
+	    height;
+	    r;
+	    g;
+	    b;
+
+        constructor() {
+            this.r = Math.round(Math.random()*255);
+            this.g = Math.round(Math.random()*255);
+            this.b = Math.round(Math.random()*255);
+			this.dx = 0;
+			this.dy = 0;
+            this.x = Math.round(Math.random()*400);
+            this.y = Math.round(Math.random()*400);
+            this.height = 50;
+            this.width = 80;
+        }
+	}
+	let myPlayer = new Player();
+	let playersArray = [myPlayer, new Player()];
+	const sceneDraw = () => {
+	    ctx.clearRect(0, 0, 600, 400);
+        ctx.fillStyle = `rgba(245,230,245,0.5)`;
+		ctx.fillRect(0, 0, 600, 400);
+
+
+		playersArray.forEach((player) => {
+		    player.x += player.dx;
+		    player.y += player.dy;
+		});
+
+
+
+        playersArray.forEach(({
+                                  x,
+                                  y,
+                                  width,
+                                  height,
+                                  r,
+                                  g,
+                                  b,
+                              }) => {
+            ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+            ctx.fillRect(x,y, width, height);
+
+            ctx.fillStyle = `rgb(0, 0, 0, 1)`;
+            const headWidth = width/2;
+            const headHeight = height;
+			const headX = x+width/4;
+            const headY = y+height/2;
+            ctx.fillRect(headX,headY, headWidth, headHeight);
+        });
+	}
+	sceneDraw();
+	document.addEventListener('keydown', (event) => {
+	    switch (event.code) {
+			case "ArrowUp":
+			    myPlayer.dy -= 1;
+			    break;
+            case "ArrowDown":
+                myPlayer.dy += 1;
+                break;
+            case "ArrowLeft":
+                myPlayer.dx -= 1;
+                break;
+            case "ArrowRight":
+                myPlayer.dx += 1;
+                break;
+        }
+    });
+
+	setInterval(sceneDraw, 1000/FPS);
+</script>
 </body>
 </html>
